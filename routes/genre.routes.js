@@ -4,18 +4,13 @@ const { body, validationResult } = require('express-validator');
 const Genre = require("../models/genre.model")
 const { Schema } = mongoose;
 const router = express();
+const {findAllGenres} = require('../controllers/genre.controller');
+
 
 // Route1-- GET genres "/"", login no required
 
-router.get('/', async (req, res) => {
-     try {
-          const genre = await Genre.find();
-          res.json(genre);
+router.get('/', async (req, res, next) => {
+     next();
 
-     } catch (error) {
-          console.error(error.message);
-          res.status(500).send("internal server error occured");
-     }
-
-})
+},findAllGenres)
 module.exports = router;

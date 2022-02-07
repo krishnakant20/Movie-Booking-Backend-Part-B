@@ -3,7 +3,6 @@ const express = require('express')
 
 // connection  with mongoose and mongodb start
 connectToMongo();
-// connection  with mongoose and mongodb end
 
 // main standard
 const app = express();
@@ -14,10 +13,10 @@ app.get("/", (req, res) => {
 });
 
 app.use(express.json());
-app.use('/movies', require('./routes/movie.routes'));
-app.use('/genres', require('./routes/genre.routes'));
-app.use('/artists', require('./routes/artist.routes'));
-app.use('/users', require('./routes/user.routes'));
+app.use('/api/movies', require('./routes/movie.routes'));
+app.use('/api/genres', require('./routes/genre.routes'));
+app.use('/api/artists', require('./routes/artist.routes'));
+app.use('/api/users', require('./routes/user.routes'));
 
 
 

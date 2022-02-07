@@ -3,55 +3,51 @@ const mongoose = require('mongoose');
 const router = express();
 const User = require('../models/user.model');
 const { body, validationResult } = require('express-validator');
+const {createUser,getAllUsers,login} = require('../controllers/user.controller');
 
-// Route1-- GET users "/"", login no required
-router.get('/', (req, res) => {
-    return res.send("users from Mongo DB");
-})
-
-// Route2-- create user using post /createuser , no login required
-router.post('/createuser', [
+// Route 1 -- POST signUp create user
+router.post('/auth/signup', [
     body('email', 'enter valid email').isEmail(),
     body('password', 'enter valid password').isLength({ min: 3 })
-], async (req, res) => {
+], async (req, res, next) => {
 
     // errror in user creation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
+    }else{
+        next();
     }
 
-    // check weather email exist already
-    try {
+},createUser)
 
-        let user = await User.findOne({ email: req.body.email })
-        if (user) {
-            return res.status(400).json({ error: "email already exists" });
-        }
-
-        // create users in db
-        user = await User.create({
-            userid: req.body.userid,
-            email: req.body.email,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            username: req.body.username,
-            contact: req.body.contact,
-            password: req.body.password,
-            role: req.body.role,
-            // isLoggedIn: true,
-        })
-
-        res.status(200).send({
-            message:"user created succesfully",
-            user:user
-        });
-
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).send("internal server error occured");
+// Route 2 -- login
+router.post('/auth/login', [
+    body('email', "enter vaild email address").isEmail(),
+    body('password', "password cannot blank").exists()
+  ], async (req, res, next) => {
+  
+    // errror in 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+    next();
+ 
+  },login)
 
-})
+// Route 3 -- logout
+// router.post('/logout', [
+//     body('email', "enter vaild email address").isEmail(),
+//     body('password', "password cannot blank").exists()
+//   ], async (req, res, next) => {
+//     next();
+
+//   },logout)
+
+// Route4-- GET users "/"", login no required
+router.get('/', (req, res, next) => {
+    next();
+},getAllUsers)
 
 module.exports = router;

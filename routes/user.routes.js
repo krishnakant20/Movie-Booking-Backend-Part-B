@@ -50,4 +50,14 @@ router.get('/', (req, res, next) => {
     next();
 },getAllUsers)
 
+// Route5-- GET getCouponCode
+router.get('/getCouponCode', (req, res) => {
+    return res.send("Your Coupon Code : StarMovie5");
+})
+
+// Route6-- GET bookShow
+router.get('/bookShow', (req, res) => {
+    return res.send("This Show is now Booked!!!");
+})
+
 module.exports = router;

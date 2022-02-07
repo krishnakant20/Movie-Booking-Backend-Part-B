@@ -9,7 +9,7 @@ const router = express();
 module.exports.findAllGenres = async (req, res) => {
     try {
         const genre = await Genre.find();
-        res.json(genre);
+        res.json({genres:genre});
 
    } catch (error) {
         console.error(error.message);

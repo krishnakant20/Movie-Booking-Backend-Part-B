@@ -5,5 +5,5 @@ const Artist = require('../models/artist.model');
 
 module.exports.findAllArtists = async (req,res)=>{
     const artist = await Artist.find();
-     res.json(artist);
+     res.json({artists:artist});
 }

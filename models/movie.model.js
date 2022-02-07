@@ -7,7 +7,7 @@ const movieSchema = new Schema({
     //     ref:'user'
     // },
     movieid: {
-        type: String,
+        type: Number,
     },
     title: {
         type: String,
@@ -26,7 +26,14 @@ const movieSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
-    }
+    },
+    published:{
+        type:Boolean,
+    },
+    released:{
+        type:Boolean,
+    },
+    
 });
 
 module.exports = mongoose.model("movie", movieSchema);

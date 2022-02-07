@@ -10,7 +10,30 @@ const { Schema } = mongoose;
 
 module.exports.findAllMovies = async (req, res) => {
      try {
-          const movie = await Movie.find();
+          let filter={};
+          if(req.query.status?.toUpperCase()==="PUBLISHED"){
+               filter.published= true;
+               // filter.status=req.query.status;
+          }
+          else if(req.query.status?.toUpperCase()==="RELEASED"){
+               filter.released=true;
+               // filter.status=req.query.status;
+          }
+          // console.log(filter);
+          const movie = await Movie.find(filter);
+          res.json({movies:movie});
+
+     } catch (error) {
+          console.error(error.message);
+          res.status(500).send("internal server error occured");
+     }
+}
+
+// find one movie by id
+module.exports.findOneMovies = async (req, res) => {
+     try {
+         
+          const movie = await Movie.find({"movieid":parseInt(req.params.id)});
           res.json(movie);
 
      } catch (error) {

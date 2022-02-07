@@ -21,6 +21,11 @@ module.exports.createUser = async (req, res) => {
         }
 
         // generate hash of password and store it in user db
+
+        // in given Databse password was stored in plain text but to provide more security bcryptjs is used and password is stored in the hash format
+
+        // so while login create new user & password to implement login/logout function properly in frontend side
+
         var salt = await bcrypt.genSaltSync(10);
         secPass = await bcrypt.hash(req.body.password, salt);
 
@@ -45,6 +50,9 @@ module.exports.createUser = async (req, res) => {
         }
         const authToken = jwt.sign(dataToken, JWT_SECRET);
 
+        // storing jwt token in session token
+        req.session["access-token"]= authToken;
+
         res.status(200).send({
             message: "user created successfully",
             user: user,
@@ -68,6 +76,10 @@ module.exports.login = async (req, res) => {
             return res.status(400).json({ error: "please enter correct credentials" });
         }
 
+        // in given Databse password was stored in plain text but to provide more security bcryptjs is used and password is stored in the hash format
+
+        // so while login create new user & password to implement login/logout function properly in frontend side
+
         // comparing frontend entered passward with db stored hash password
         const passwordCompare = await bcrypt.compare(password, user.password);
         if (!passwordCompare) {
@@ -82,11 +94,26 @@ module.exports.login = async (req, res) => {
         }
         const authToken = jwt.sign(data, JWT_SECRET);
         // console.log(authToken);
+
+        // storing jwt token in session token
+        req.session["access-token"]= authToken;
+        console.log("login success");
         res.status(200).send({
             message: "LoggedIn successfully",
             user: user,
             authToken: authToken
         });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("internal server error occured");
+    }
+}
+
+// logout
+module.exports.logout = async (req, res) => {
+    try {
+        req.session.destroy();
+        res.status(200).send("Successfully Logged Out");
     } catch (error) {
         console.error(error.message);
         res.status(500).send("internal server error occured");

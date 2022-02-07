@@ -6,7 +6,9 @@ connectToMongo();
 
 // main standard
 const app = express();
-const port = 9000;
+const port = 8085;
+
+// localhost:8085
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Upgrad Movie booking application development." });
